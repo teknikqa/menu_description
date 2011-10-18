@@ -1,0 +1,37 @@
+<?php
+// $Id$
+/**
+ * @file
+ * Adds a menu description field to the node edit page.
+ */
+
+ /**
+ * Implementation of hook_form_alter()
+ */
+function menu_description_form_alter(&$form, $form_state, $form_id) {
+  if (isset($form['#node']) && $form['#node']->type .'_node_form' == $form_id) {
+    if (isset($form['menu']['options']['#value']['attributes']['title'])) {
+      $defaultVal = $form['menu']['options']['#value']['attributes']['title'];
+    }
+    else {
+      $defaultVal = "";
+    }
+
+    $form['menu']['description'] = array(
+      '#type' => 'textarea',
+      '#title' => t('Description'),
+      '#default_value' => $defaultVal,
+      '#rows' => 1,
+      '#description' => t('The description displayed when hovering over a menu item.'),
+      );
+    $form['#submit'][] = 'mymodule_node_form_submit';
+  }
+}
+
+/**
+ * Implementation of node_form_submit()
+ */
+function menu_description_node_form_submit($form, &$form_state) {
+  $form_state['values']['menu']['customized'] = TRUE;
+  $form_state['values']['menu']['options']['attributes']['title'] = $form_state['values']['menu']['description'];
+}

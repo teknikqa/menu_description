@@ -1,0 +1,5 @@
+; $Id$
+name = Menu Description
+description = Adds a menu description to the node edit page.
+core = 6.x
+
